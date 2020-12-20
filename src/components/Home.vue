@@ -27,6 +27,7 @@
   }
 </script>
 
+<!--各个组件的样式-->
 <style lang="less" scoped>
   .home_container {
     height: 100%;
