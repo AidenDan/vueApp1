@@ -37,7 +37,7 @@
     name: "Login",
     data() {
       return {
-        f:true,
+        f: true,
         // 定义登录表单的数据对象
         loginForm: {
           username: "",
@@ -79,7 +79,7 @@
           // console.log(responseResult);
           // console.log(responseResult.data);
           console.log(responseResult);
-          if(responseResult.meta.status !==200){
+          if (responseResult.meta.status !== 200) {
             this.$message.error("登录失败");
             console.log("登录失败")
           } else {
