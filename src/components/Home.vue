@@ -1,14 +1,17 @@
 <template>
-<!--    <p>Home组件</p>-->
-<!--    <el-button type="info" round @click="logout">退出登录</el-button>-->
-    <el-container class=" home_container">
-      <el-header>Header</el-header>
-      <el-container>
-        <el-aside width="200px">Aside</el-aside>
-        <el-main>Main</el-main>
-      </el-container>
+  <el-container class=" home_container">
+    <el-header>
+      <div class="container_sys">
+        <img src="../assets/tx_log.jpg" alt="" class="img_log">
+        <span class="span_sys">后台管理系统</span>
+      </div>
+      <el-button type="info" round @click="logout">退出登录</el-button>
+    </el-header>
+    <el-container>
+      <el-aside width="200px">Aside</el-aside>
+      <el-main>Main</el-main>
     </el-container>
-
+  </el-container>
 </template>
 
 <script>
@@ -28,13 +31,36 @@
   .home_container {
     height: 100%;
   }
+
   .el-header {
     background-color: #373d41;
+    display: flex;
+    justify-content: space-between;
+    padding-left: 5px;
+    align-items: center;
+    color: #ffffff;
+    font-size: 20px;
   }
+
   .el-aside {
     background-color: #333744;
   }
+
   .el-main {
     background-color: #eaedf1;
+  }
+
+  .img_log {
+    width: 55px;
+    height: 55px;
+  }
+
+  .container_sys {
+    display: flex;
+    align-items: center;
+  }
+
+  .span_sys {
+    margin-left: 15px;
   }
 </style>
