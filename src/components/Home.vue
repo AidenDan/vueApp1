@@ -7,9 +7,30 @@
       </div>
       <el-button type="info" round @click="logout">退出登录</el-button>
     </el-header>
+
     <el-container>
-      <el-aside width="200px">Aside</el-aside>
+      <el-aside width="200px">
+        <!--左侧菜单栏-->
+        <el-menu background-color="#333744" text-color="#fff" active-text-color="#ffd04b">
+          <!--一级菜单-->
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-location"></i>
+              <span>导航一</span>
+            </template>
+            <!--二级菜单-->
+            <el-menu-item index="2">
+              <template slot="title">
+                <i class="el-icon-location"></i>
+                <span>导航一</span>
+              </template>
+            </el-menu-item>
+          </el-submenu>
+        </el-menu>
+      </el-aside>
+
       <el-main>Main</el-main>
+
     </el-container>
   </el-container>
 </template>

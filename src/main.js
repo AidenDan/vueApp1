@@ -11,8 +11,13 @@ import './assets/css/global.css'
 import './assets/css/iconfont.css'
 // 导入axios
 import axios from 'axios'
-
-Vue.prototype.$http = axios //挂载axios到Vue的原型对象上，就可通过this来访问
+// 配置访问页面的拦截器
+// 每个请求都携带token到后台服务器
+axios.interceptors.request.use(config =>{
+  config.headers.Authorization= window.sessionStorage.getItem("token");
+  return config;
+});
+Vue.prototype.$http = axios; //挂载axios到Vue的原型对象上，就可通过this来访问
 axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'; // axios的基准url路径配置
 
 // 引入弹框提示组件 Message为常量，类似于工具类
@@ -21,7 +26,7 @@ import {Message} from 'element-ui'
 // Vue.prototype.$message = Message;
 
 // 挂载
-Vue.use(Element)
+Vue.use(Element);
 // Vue.use(Message)
 
 Vue.config.productionTip = false;
