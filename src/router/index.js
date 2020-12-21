@@ -8,17 +8,34 @@ Vue.use(Router)
 const router = new Router({
   routes: [
     // 指定路由规则，当用户访问/login时，用Login组件来显示
-    {path: "/login", component: Login},
+    {
+      path: "/login",
+      component: Login,
+      meta: {
+        title: "登录"
+      }
+    },
     // 重定向
-    {path: "/", redirect: "/login"},
+    {
+      path: "/",
+      redirect: "/login"
+    },
     // 路由到Home组件
-    {path: "/home", component: Home}
+    {
+      path: "/home",
+      component: Home,
+      meta: {
+        title: "主页"
+      }
+    }
   ]
 });
 export default router
 
 // 路由导航守卫控制登录权限
 router.beforeEach((to, from, next) => {
+  // 导航卫士设置title
+  window.document.title = to.matched[0].meta.title;
   // 如果访问的登录页面，那么就直接放行
   if (to.path === "/login") {
     // next()表示直接放行
