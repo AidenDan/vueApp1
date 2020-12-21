@@ -14,17 +14,17 @@
         <el-menu background-color="#333744" text-color="#fff" active-text-color="#ffd04b">
 
           <!--一级菜单-->
-          <el-submenu :index="item.id +''" v-for = "item in menuList" :key="item.id">
+          <el-submenu :index="item.id +''" v-for="item in menuList" :key="item.id">
             <template slot="title">
               <i class="el-icon-location"></i>
-              <span>{{item.authName}}</span>
+              <span>{{ item.authName }}</span>
             </template>
 
             <!--二级菜单-->
             <el-menu-item :index="subItem.id+''" v-for="subItem in item.children" :key="subItem.id">
               <template slot="title">
                 <i class="el-icon-location"></i>
-                <span>{{subItem.authName}}</span>
+                <span>{{ subItem.authName }}</span>
               </template>
             </el-menu-item>
 
@@ -39,66 +39,66 @@
 </template>
 
 <script>
-  export default {
-    data () {
-      return {
-        menuList: []
-      }
+export default {
+  data() {
+    return {
+      menuList: []
+    }
+  },
+  name: "Home",
+  created() {
+    this.getMenuList();
+  },
+  methods: {
+    logout() {
+      // 点击退出，就清空token，并重新转到登录页面
+      window.sessionStorage.clear();
+      this.$router.push("/login");
     },
-    name: "Home",
-    created() {
-      this.getMenuList();
-    },
-    methods: {
-      logout() {
-        // 点击退出，就清空token，并重新转到登录页面
-        window.sessionStorage.clear();
-        this.$router.push("/login");
-      },
-      async getMenuList() {
-        const {data: res} = await this.$http.get("menus");
-        this.menuList = res.data;
-        console.log(this.menuList)
-      }
+    async getMenuList() {
+      const {data: res} = await this.$http.get("menus");
+      this.menuList = res.data;
+      console.log(this.menuList)
     }
   }
+}
 </script>
 
 <!--各个组件的样式-->
 <style lang="less" scoped>
-  .home_container {
-    height: 100%;
-  }
+.home_container {
+  height: 100%;
+}
 
-  .el-header {
-    background-color: #373d41;
-    display: flex;
-    justify-content: space-between;
-    padding-left: 5px;
-    align-items: center;
-    color: #ffffff;
-    font-size: 20px;
-  }
+.el-header {
+  background-color: #373d41;
+  display: flex;
+  justify-content: space-between;
+  padding-left: 5px;
+  align-items: center;
+  color: #ffffff;
+  font-size: 20px;
+}
 
-  .el-aside {
-    background-color: #333744;
-  }
+.el-aside {
+  background-color: #333744;
+}
 
-  .el-main {
-    background-color: #eaedf1;
-  }
+.el-main {
+  background-color: #eaedf1;
+}
 
-  .img_log {
-    width: 55px;
-    height: 55px;
-  }
+.img_log {
+  width: 55px;
+  height: 55px;
+}
 
-  .container_sys {
-    display: flex;
-    align-items: center;
-  }
+.container_sys {
+  display: flex;
+  align-items: center;
+}
 
-  .span_sys {
-    margin-left: 15px;
-  }
+.span_sys {
+  margin-left: 15px;
+}
 </style>

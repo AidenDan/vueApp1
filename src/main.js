@@ -13,8 +13,8 @@ import './assets/css/iconfont.css'
 import axios from 'axios'
 // 配置访问页面的拦截器
 // 每个请求都携带token到后台服务器
-axios.interceptors.request.use(config =>{
-  config.headers.Authorization= window.sessionStorage.getItem("token");
+axios.interceptors.request.use(config => {
+  config.headers.Authorization = window.sessionStorage.getItem("token");
   return config;
 });
 Vue.prototype.$http = axios; //挂载axios到Vue的原型对象上，就可通过this来访问
