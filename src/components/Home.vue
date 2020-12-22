@@ -9,21 +9,23 @@
     </el-header>
 
     <el-container>
-      <el-aside width="200px">
+      <el-aside :width="isCollapse ? '64px' : '200px'">
+        <div class="toggle" @click="collapse">III</div>
         <!--左侧菜单栏-->
-        <el-menu background-color="#333744" text-color="#fff" active-text-color="#ffd04b">
+        <el-menu background-color="#333744" text-color="#fff" active-text-color="#409BFF" :unique-opened="true"
+                 :collapse="isCollapse" :collapse-transition="false">
 
           <!--一级菜单-->
           <el-submenu :index="item.id +''" v-for="item in menuList" :key="item.id">
             <template slot="title">
-              <i class="el-icon-location"></i>
+              <i :class="iconList[item.id]"></i>
               <span>{{ item.authName }}</span>
             </template>
 
             <!--二级菜单-->
             <el-menu-item :index="subItem.id+''" v-for="subItem in item.children" :key="subItem.id">
               <template slot="title">
-                <i class="el-icon-location"></i>
+                <i class="el-icon-menu"></i>
                 <span>{{ subItem.authName }}</span>
               </template>
             </el-menu-item>
@@ -32,7 +34,9 @@
         </el-menu>
       </el-aside>
 
-      <el-main>Main</el-main>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
 
     </el-container>
   </el-container>
@@ -42,7 +46,16 @@
 export default {
   data() {
     return {
-      menuList: []
+      menuList: [],
+      // 图像icon列表
+      iconList: {
+        125: "el-icon-s-custom",
+        103: "el-icon-s-check",
+        101: "el-icon-shopping-bag-1",
+        102: "el-icon-document",
+        145: "el-icon-data-line"
+      },
+      isCollapse: false
     }
   },
   name: "Home",
@@ -59,6 +72,9 @@ export default {
       const {data: res} = await this.$http.get("menus");
       this.menuList = res.data;
       console.log(this.menuList)
+    },
+    collapse() {
+      this.isCollapse = !this.isCollapse;
     }
   }
 }
@@ -68,6 +84,10 @@ export default {
 <style lang="less" scoped>
 .home_container {
   height: 100%;
+}
+
+.el-menu {
+  border-right: none;
 }
 
 .el-header {
@@ -100,5 +120,15 @@ export default {
 
 .span_sys {
   margin-left: 15px;
+}
+
+.toggle {
+  width: 100%;
+  height: 25px;
+  background: #4A5064;
+  font-size: 20px;
+  color: #ffffff;
+  text-align: center; //文字居中
+  cursor: pointer;
 }
 </style>

@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from "../components/Login";
 import Home from "../components/Home";
+import Welcome from "../components/Welcome";
 
 Vue.use(Router)
 
@@ -24,6 +25,13 @@ const router = new Router({
     {
       path: "/home",
       component: Home,
+      children: [
+        {
+          path: "/welcome",
+          component: Welcome
+        }
+      ],
+      redirect: "/welcome",
       meta: {
         title: "主页"
       }
@@ -51,3 +59,5 @@ router.beforeEach((to, from, next) => {
     return next("/login");
   }
 });
+router.mode = 'history';
+

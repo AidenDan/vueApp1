@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <!--路由占位符，将根组件与子组件串联起来-->
-    <router-view/>
+    <keep-alive>
+      <router-view/>
+    </keep-alive>
   </div>
 </template>
 
