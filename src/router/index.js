@@ -3,6 +3,14 @@ import Router from 'vue-router'
 import Login from "../components/Login";
 import Home from "../components/Home";
 import Welcome from "../components/Welcome";
+import Users from "../components/users/Users";
+import Rights from "../components/right/Rights";
+import Roles from "../components/right/Roles";
+import Goods from "../components/goods/Goods";
+import Params from "../components/goods/Params";
+import Categories from "../components/goods/Categories";
+import Orders from "../components/orders/Orders";
+import Reports from "../components/reports/Reports";
 
 Vue.use(Router)
 
@@ -28,7 +36,66 @@ const router = new Router({
       children: [
         {
           path: "/welcome",
-          component: Welcome
+          component: Welcome,
+          meta: {
+            title: "欢迎"
+          }
+        },
+        {
+          path: "/users",
+          component: Users,
+          meta: {
+            title: "用户"
+          }
+        },
+        {
+          path: "/rights",
+          component: Rights,
+          meta: {
+            title: "权限"
+          }
+        },
+        {
+          path: "/roles",
+          component: Roles,
+          meta: {
+            title: "角色"
+          }
+        },
+        {
+          path: "/goods",
+          component: Goods,
+          meta: {
+            title: "商品列表"
+          }
+        },
+        {
+          path: "/params",
+          component: Params,
+          meta: {
+            title: "分类参数"
+          }
+        },
+        {
+          path: "/categories",
+          component: Categories,
+          meta: {
+            title: "商品分类"
+          }
+        },
+        {
+          path: "/orders",
+          component: Orders,
+          meta: {
+            title: "订单管理"
+          }
+        },
+        {
+          path: "/reports",
+          component: Reports,
+          meta: {
+            title: "订单管理"
+          }
         }
       ],
       redirect: "/welcome",
@@ -43,7 +110,7 @@ export default router
 // 路由导航守卫控制登录权限
 router.beforeEach((to, from, next) => {
   // 导航卫士设置title
-  window.document.title = to.matched[0].meta.title;
+  // window.document.title = to.matched[0].meta.title;
   // 如果访问的登录页面，那么就直接放行
   if (to.path === "/login") {
     // next()表示直接放行

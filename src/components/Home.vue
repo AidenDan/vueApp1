@@ -13,7 +13,7 @@
         <div class="toggle" @click="collapse">III</div>
         <!--左侧菜单栏-->
         <el-menu background-color="#333744" text-color="#fff" active-text-color="#409BFF" :unique-opened="true"
-                 :collapse="isCollapse" :collapse-transition="false">
+                 :collapse="isCollapse" :collapse-transition="false" :router="true" :default-active="activePath">
 
           <!--一级菜单-->
           <el-submenu :index="item.id +''" v-for="item in menuList" :key="item.id">
@@ -23,7 +23,8 @@
             </template>
 
             <!--二级菜单-->
-            <el-menu-item :index="subItem.id+''" v-for="subItem in item.children" :key="subItem.id">
+            <el-menu-item :index="'/'+subItem.path" v-for="subItem in item.children" :key="subItem.id"
+                          @click="saveActivePath('/'+subItem.path)">
               <template slot="title">
                 <i class="el-icon-menu"></i>
                 <span>{{ subItem.authName }}</span>
@@ -55,12 +56,15 @@ export default {
         102: "el-icon-document",
         145: "el-icon-data-line"
       },
-      isCollapse: false
+      isCollapse: false,
+      activePath: ""
     }
   },
   name: "Home",
   created() {
     this.getMenuList();
+    // 当前组件一创建就设置session中的保存的活跃路由
+    this.activePath = window.sessionStorage.getItem("activePath");
   },
   methods: {
     logout() {
@@ -75,6 +79,11 @@ export default {
     },
     collapse() {
       this.isCollapse = !this.isCollapse;
+    },
+    saveActivePath(activePath) {
+      this.activePath = activePath;
+      // 把活跃路由处存到sessionStorage中
+      window.sessionStorage.setItem("activePath", activePath);
     }
   }
 }
@@ -116,6 +125,7 @@ export default {
 .container_sys {
   display: flex;
   align-items: center;
+  width: 200px;
 }
 
 .span_sys {
