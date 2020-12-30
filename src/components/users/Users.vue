@@ -37,10 +37,10 @@
         </el-table-column>
 
         <el-table-column label="操作" width="185px" align="center">
-          <template>
+          <template slot-scope="scope">
             <!--编辑按钮-->
             <el-tooltip effect="dark" content="编辑" placement="top" :enterable="false">
-              <el-button type="primary" icon="el-icon-edit" size="mini"></el-button>
+              <el-button type="primary" icon="el-icon-edit" size="mini" @click="getUserInfoById(scope.row.id)"></el-button>
             </el-tooltip>
             <!--删除按钮-->
             <el-tooltip effect="dark" content="删除" placement="top" :enterable="false">
@@ -84,11 +84,32 @@
           <el-input v-model="addUserFormModel.mobile" placeholder="请输入手机号"></el-input>
         </el-form-item>
       </el-form>
-
       <!--      下部分-->
       <span slot="footer" class="dialog-footer">
     <el-button @click="cancelAddUser()">取 消</el-button>
     <el-button type="primary" @click="confirmAddUser()">确 定</el-button>
+  </span>
+    </el-dialog>
+
+<!--    修改用户-->
+    <el-dialog title="修改用户" :visible.sync="updateUserDialogVisible" width="50%" @close="updateUserDialogCloseListener()">
+      <!--      表格主体部分-->
+      <el-form ref="updateUserFormRef" :model="updateUserFormModel" :rules="updateUserFormRules" label-width="70px"
+               class="class-addUserForm">
+        <el-form-item label="用户名" >
+          <el-input v-model="updateUserFormModel.username" placeholder="请输入用户名" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="updateUserFormModel.email" placeholder="请输入邮箱"></el-input>
+        </el-form-item>
+        <el-form-item label="手机" prop="mobile">
+          <el-input v-model="updateUserFormModel.mobile" placeholder="请输入手机号"></el-input>
+        </el-form-item>
+      </el-form>
+      <!--      下部分-->
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="cancelUpdateUser()">取 消</el-button>
+    <el-button type="primary" @click="confirmUpdateUser()">确 定</el-button>
   </span>
     </el-dialog>
   </div>
@@ -156,7 +177,19 @@ export default {
           {required: true, message: '请输入有效手机号码', trigger: 'blur'},
           {validator: checkPhone, trigger: 'blur'} // 自定义手机号码的校验规则
         ]
-      }
+      },
+      updateUserDialogVisible: false,
+      updateUserFormRules: {
+        email: [
+          {required: true, message: '请输入有效邮箱', trigger: 'blur'},
+          {validator: checkEmail, trigger: 'blur'} // 自定义邮箱的校验规则
+        ],
+        mobile: [
+          {required: true, message: '请输入有效手机号码', trigger: 'blur'},
+          {validator: checkPhone, trigger: 'blur'} // 自定义手机号码的校验规则
+        ]
+      },
+      updateUserFormModel: {},
     }
   },
   created() {
@@ -238,7 +271,51 @@ export default {
     // 监听添加用户对话框关闭的事件 重置输入信息
     addUserDialogCloseListener() {
       this.$refs.addUserFormRef.resetFields();
-    }
+    },
+    // 根据用户id获取当前用户的信息
+    async getUserInfoById(uId) {
+      const {data: response} = await this.$http.get(`users/${uId}`);
+      console.log(response)
+      if (response.meta.status !==  200){
+        this.$message.error("获取用户信息失败")
+      } else {
+        this.updateUserFormModel = response.data;
+      }
+      this.updateUserDialogVisible = true;
+    },
+    // 监听修改用户对话框关闭的事件 重置输入信息
+    updateUserDialogCloseListener() {
+      this.$refs.updateUserFormRef.resetFields();
+    },
+    // 取消修改用户
+    cancelUpdateUser() {
+      this.updateUserDialogVisible = false;
+    },
+    // 确定添加用户
+    async confirmUpdateUser() {
+      // 表单预校验
+      // 点击确定时对数据进行校验
+      // validate()中传入一个回调函数
+      // async异步
+      this.$refs.updateUserFormRef.validate(async validate => {
+        console.log(validate);
+        if (!validate) {
+          return;
+        }
+
+        // 发送修改用户的请求
+        const {data: response} = await this.$http.put(`users/${this.updateUserFormModel.id}`,
+          {"email": this.updateUserFormModel.email, "mobile":this.updateUserFormModel.mobile});
+        console.log(response)
+        if (response.meta.status !== 200) {
+          this.$message.error("修改用户失败");
+        } else {
+          this.$message.success("修改用户成功");
+          await this.getUserList();
+        }
+        this.updateUserDialogVisible = false;
+      })
+    },
   }
 }
 </script>
