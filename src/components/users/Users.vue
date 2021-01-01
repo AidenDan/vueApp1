@@ -40,11 +40,13 @@
           <template slot-scope="scope">
             <!--编辑按钮-->
             <el-tooltip effect="dark" content="编辑" placement="top" :enterable="false">
-              <el-button type="primary" icon="el-icon-edit" size="mini" @click="getUserInfoById(scope.row.id)"></el-button>
+              <el-button type="primary" icon="el-icon-edit" size="mini"
+                         @click="getUserInfoById(scope.row.id)"></el-button>
             </el-tooltip>
             <!--删除按钮-->
             <el-tooltip effect="dark" content="删除" placement="top" :enterable="false">
-              <el-button type="danger" icon="el-icon-delete" size="mini"></el-button>
+              <el-button type="danger" icon="el-icon-delete" size="mini"
+                         @click="deleteUserById(scope.row.id)"></el-button>
             </el-tooltip>
             <!--分配角色按钮-->
             <el-tooltip effect="dark" content="分配角色" placement="top" :enterable="false">
@@ -91,12 +93,13 @@
   </span>
     </el-dialog>
 
-<!--    修改用户-->
-    <el-dialog title="修改用户" :visible.sync="updateUserDialogVisible" width="50%" @close="updateUserDialogCloseListener()">
+    <!--    修改用户-->
+    <el-dialog title="修改用户" :visible.sync="updateUserDialogVisible" width="50%"
+               @close="updateUserDialogCloseListener()">
       <!--      表格主体部分-->
       <el-form ref="updateUserFormRef" :model="updateUserFormModel" :rules="updateUserFormRules" label-width="70px"
                class="class-addUserForm">
-        <el-form-item label="用户名" >
+        <el-form-item label="用户名">
           <el-input v-model="updateUserFormModel.username" placeholder="请输入用户名" disabled></el-input>
         </el-form-item>
         <el-form-item label="邮箱" prop="email">
@@ -276,7 +279,7 @@ export default {
     async getUserInfoById(uId) {
       const {data: response} = await this.$http.get(`users/${uId}`);
       console.log(response)
-      if (response.meta.status !==  200){
+      if (response.meta.status !== 200) {
         this.$message.error("获取用户信息失败")
       } else {
         this.updateUserFormModel = response.data;
@@ -305,7 +308,7 @@ export default {
 
         // 发送修改用户的请求
         const {data: response} = await this.$http.put(`users/${this.updateUserFormModel.id}`,
-          {"email": this.updateUserFormModel.email, "mobile":this.updateUserFormModel.mobile});
+          {"email": this.updateUserFormModel.email, "mobile": this.updateUserFormModel.mobile});
         console.log(response)
         if (response.meta.status !== 200) {
           this.$message.error("修改用户失败");
@@ -316,6 +319,29 @@ export default {
         this.updateUserDialogVisible = false;
       })
     },
+    // 删除用户 点击取消就会抛出异常
+    async deleteUserById(userId) {
+      // 如果点击确定方法的返回值为confirm，如果点击取消方法的返回值为cancel
+      const confirmOrCancel = await this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).catch((err) => {
+        return err
+      });
+      console.log(confirmOrCancel);
+      if ('confirm' === confirmOrCancel) {
+        const {data: response} = await this.$http.delete(`users/${userId}`);
+        if (response.meta.status === 200) {
+          this.$message.success("删除成功");
+          await this.getUserList();
+        } else {
+          this.$message.error("删除失败");
+        }
+      } else{
+        this.$message.info("已取消删除");
+      }
+    }
   }
 }
 </script>
