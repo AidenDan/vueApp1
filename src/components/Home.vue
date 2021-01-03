@@ -36,7 +36,7 @@
       </el-aside>
 
       <el-main>
-        <!--       这里会被子路由组件给替换 -->
+        <!--这里会被子路由组件给替换 -->
         <router-view></router-view>
       </el-main>
 
